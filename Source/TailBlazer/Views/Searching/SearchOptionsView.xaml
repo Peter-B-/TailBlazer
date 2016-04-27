@@ -25,7 +25,7 @@
                 <ResourceDictionary Source="pack://application:,,,/TailBlazer;component/Themes/Colours.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/TailBlazer;component/Themes/Dragable.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <DataTemplate DataType="{x:Type searching:SearchOptionsProxy}">
 
                 <Grid Margin="4 4 4 4" x:Name="Row">
@@ -51,7 +51,7 @@
                                         UseLayoutRounding="True"
                                         wpf:ShadowAssist.ShadowDepth="Depth2"
                                         VerticalAlignment="Center">
-                            <wpf:PackIcon  
+                        <wpf:PackIcon  
                                         Padding="4" 
                                         Foreground="{Binding Background.Value}"
                                         Kind="{Binding IconKind,FallbackValue={x:Static wpf:PackIconKind.ArrowRightBold}}"/>
@@ -85,7 +85,7 @@
                                                         BorderThickness="0"
                                                         SnapsToDevicePixels="True"
                                                         UseLayoutRounding="True"
-                                                        wpf:ShadowAssist.ShadowDepth="Depth2"
+                                                        ToolTip="{Binding}"
                                                         Command="{Binding ElementName=Row,Path=DataContext.HighlightCommand}"
                                                         CommandParameter="{Binding}"
                                                         Margin="2">
@@ -136,14 +136,14 @@
 
     <wpf:DialogHost Identifier="{Binding Id}">
         <Grid Width="435" Height="325">
-        <Grid.RowDefinitions>
-            <RowDefinition  Height="Auto"/>
-            <RowDefinition  Height="Auto"/>
-            <RowDefinition Height="*"/>
-             <RowDefinition  Height="Auto"/>
+            <Grid.RowDefinitions>
+                <RowDefinition  Height="Auto"/>
+                <RowDefinition  Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition  Height="Auto"/>
             </Grid.RowDefinitions>
-        
-        <TextBlock 
+
+            <TextBlock 
                 Margin="6 8 6 0"
                 FontSize="16"
                 FontWeight="DemiBold"
@@ -208,8 +208,8 @@
                 Style="{DynamicResource MaterialDesignFlatButton}"
                 Content="Close"     
                 Command="{x:Static wpf:DialogHost.CloseDialogCommand}"/>
-     
-            
+
+
         </Grid>
 
     </wpf:DialogHost>

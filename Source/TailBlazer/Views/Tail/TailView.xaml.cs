@@ -9,10 +9,16 @@ namespace TailBlazer.Views.Tail
     /// </summary>
     public partial class TailView : UserControl
     {
+        bool tailIsChecked;
+
+
         public TailView()
         {
             InitializeComponent();
-            Loaded += (sender, e) =>
+            tailIsChecked = TailCheckBox.IsChecked.Value;
+
+            this.KeyDown += new KeyEventHandler(SpacebarIsPressed);
+            IsVisibleChanged += (sender, e) =>
             {
                 Dispatcher.BeginInvoke(new Action(() =>
                 {
@@ -24,5 +30,14 @@ namespace TailBlazer.Views.Tail
 
             };
         }
+        void SpacebarIsPressed (object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                TailCheckBox.IsChecked = tailIsChecked;
+                tailIsChecked = !TailCheckBox.IsChecked.Value;
+            }
+        }
+        
     }
 }

@@ -75,6 +75,7 @@ namespace TailBlazer.Infrastucture
             _selector = selector;
          //  return;
 
+
             var dataSource = ((ReadOnlyObservableCollection<LineProxy>) selector.ItemsSource)
                 .ToObservableChangeSet()
                 .ObserveOn(_schedulerProvider.Background)
@@ -274,7 +275,7 @@ namespace TailBlazer.Infrastucture
                                 _lastSelected = lineProxy;
                                 innerList.Add(lineProxy);
                             }
-                            args.Handled = true;
+                              args.Handled = true;
                             return;
                         }
 

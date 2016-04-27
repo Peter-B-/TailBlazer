@@ -9,9 +9,7 @@ using System.Windows.Input;
 using DynamicData;
 using DynamicData.Binding;
 using DynamicData.PLinq;
-using DynamicData.Aggregation;
 using MaterialDesignThemes.Wpf;
-using TailBlazer.Controls;
 using TailBlazer.Domain.Annotations;
 using TailBlazer.Domain.FileHandling;
 using TailBlazer.Domain.FileHandling.Search;
@@ -62,6 +60,7 @@ namespace TailBlazer.Views.Tail
         public ICommand CopyToClipboardCommand { get; }
         public ICommand OpenFileCommand { get; }
         public ICommand OpenFolderCommand { get; }
+        public ICommand CopyPathToClipboardCommand { get; }
         public ICommand OpenSearchOptionsCommand => new Command(OpenSearchOptions);
 
         public string Name { get; }
@@ -79,7 +78,8 @@ namespace TailBlazer.Views.Tail
             [NotNull] SearchOptionsViewModel searchOptionsViewModel,
             [NotNull] ITailViewStateRestorer restorer,
             [NotNull] SearchHints searchHints,
-            [NotNull] ITailViewStateControllerFactory tailViewStateControllerFactory)
+            [NotNull] ITailViewStateControllerFactory tailViewStateControllerFactory,
+            [NotNull] IThemeProvider themeProvider)
         {
          
             if (logger == null) throw new ArgumentNullException(nameof(logger));
@@ -94,6 +94,7 @@ namespace TailBlazer.Views.Tail
             if (stateBucketService == null) throw new ArgumentNullException(nameof(stateBucketService));
             if (searchOptionsViewModel == null) throw new ArgumentNullException(nameof(searchOptionsViewModel));
             if (searchHints == null) throw new ArgumentNullException(nameof(searchHints));
+            if (themeProvider == null) throw new ArgumentNullException(nameof(themeProvider));
 
             Name = fileWatcher.FullName;
             SelectionMonitor = selectionMonitor;
@@ -103,6 +104,7 @@ namespace TailBlazer.Views.Tail
             CopyToClipboardCommand = new Command(() => clipboardHandler.WriteToClipboard(selectionMonitor.GetSelectedText()));
             OpenFileCommand = new Command(() => Process.Start(fileWatcher.FullName));
             OpenFolderCommand = new Command(() => Process.Start(fileWatcher.Folder));
+            CopyPathToClipboardCommand = new Command(() => clipboardHandler.WriteToClipboard(fileWatcher.FullName));
             SearchMetadataCollection = searchMetadataCollection;
             
             var horizonalScrollArgs = new ReplaySubject<TextScrollInfo>(1);
@@ -159,7 +161,7 @@ namespace TailBlazer.Views.Tail
                             .ForBinding();
 
             //load lines into observable collection
-            var lineProxyFactory = new LineProxyFactory(new TextFormatter(searchMetadataCollection), new LineMatches(searchMetadataCollection), horizonalScrollArgs.DistinctUntilChanged());
+            var lineProxyFactory = new LineProxyFactory(new TextFormatter(searchMetadataCollection), new LineMatches(searchMetadataCollection), horizonalScrollArgs.DistinctUntilChanged(), themeProvider);
 
             var loader = lineScroller.Lines.Connect()
                 .LogChanges(logger, "Received")
